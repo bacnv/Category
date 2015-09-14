@@ -2,6 +2,7 @@ package code.rest
 
 import java.util.UUID
 
+import code.common.Message
 import code.model._
 import com.mongodb.{QueryBuilder, BasicDBObject}
 import net.liftweb.http.{OkResponse, LiftRules}
@@ -57,9 +58,20 @@ object ProductAPI extends RestHelper{
     case "productdetail" :: "updateproductdetail" :: Nil Options _ => OkResponse()
     case "productdetail" :: "updateproductdetail" :: Nil JsonPost json -> request => updateFactorOption(json)
 
+    case "product" ::"bycategory" :: Nil Options _ => OkResponse()
+    case "product" ::"bycategory" :: q :: Nil JsonGet req => getProductbyCategory(q)
+
   }
 
+def getProductbyCategory(q:String):JValue={
+  val dbfind = Product.findAll("CategoryId" -> q)
 
+  if(dbfind.size > 0)
+    Message.returnMassage("product","0","SUCCESS",dbfind.map(_.asJValue))
+  else
+    Message.returnMassage("product","1","Product not found",null)
+
+}
 
   def getproductJSON(): JValue = {
     val DBList = Product.findAll
