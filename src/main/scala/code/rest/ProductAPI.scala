@@ -58,10 +58,14 @@ object ProductAPI extends RestHelper{
     case "productdetail" :: "updateproductdetail" :: Nil Options _ => OkResponse()
     case "productdetail" :: "updateproductdetail" :: Nil JsonPost json -> request => updateFactorOption(json)
 
-    case "product" ::"bycategory" :: Nil Options _ => OkResponse()
+    case "product" ::"bycategory" :: q :: Nil Options _ => OkResponse()
     case "product" ::"bycategory" :: q :: Nil JsonGet req => getProductbyCategory(q)
 
+    //case "productdetail" :: "byproductid" :: Nil Options _ => OkResponse()
+   // case "productdetail" :: "byproductid" :: q :: Nil JsonGet req =>
   }
+
+
 
 def getProductbyCategory(q:String):JValue={
   val dbfind = Product.findAll("CategoryId" -> q)
