@@ -29,6 +29,7 @@ class Category private () extends MongoRecord[Category] with StringPk[Category] 
   object name extends StringField(this, 1024)
   object description extends StringField(this, 1024)
   object status extends StringField(this, 1024)
+  object code_map extends StringField(this,20)
   object created_date extends LongField(this)
 }
 
@@ -58,6 +59,7 @@ object Category extends Category with MongoMetaRecord[Category] {
     var pageIndex: Int = 1
     var pageSize: Int = 5
     var id = ""
+    var code_map = ""
     var description = ""
     var name = ""
     var status = ""
@@ -79,6 +81,8 @@ object Category extends Category with MongoMetaRecord[Category] {
           name = a.toString
         } else if (paramName.toLowerCase.equals("status")) {
           status = a.toString
+        }else if (paramName.toLowerCase.equals("code_map")) {
+          code_map = a.toString
         } else if (paramName.toLowerCase.equals("description")) {
           description = a.toString
         }  else if (paramName.toLowerCase.equals("order_by")) {
@@ -94,6 +98,9 @@ object Category extends Category with MongoMetaRecord[Category] {
     }
     if (!status.isEmpty && status != "") {
       jmap += "status" -> status
+    }
+    if (!code_map.isEmpty && status != "") {
+      jmap += "code_map" -> code_map
     }
     if (!description.isEmpty && description != "") {
       jmap += "description" -> description
@@ -115,6 +122,7 @@ object Category extends Category with MongoMetaRecord[Category] {
     var name = ""
     var description = ""
     var status = ""
+    var code_map = ""
 
    
     var created_date = System.currentTimeMillis() / 1000
@@ -127,6 +135,9 @@ object Category extends Category with MongoMetaRecord[Category] {
         description = value
       } else if (key.toString.equals("status")) {
         status = value
+      }
+      else if (key.toString.equals("code_map")) {
+        code_map = value
       }
 
 
@@ -173,6 +184,9 @@ object Category extends Category with MongoMetaRecord[Category] {
         if (value.toString.isEmpty || value == "") {
           return Message.returnMassage("category", "2", "Status must be exist", ("" -> ""))
         }
+        qry1 += key -> value.toString
+      }else if (key.toString.equals("code_map")) {
+
         qry1 += key -> value.toString
       }
 
